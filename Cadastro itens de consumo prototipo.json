@@ -4,16 +4,23 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SET NOCOUNT ON;\n\nINSERT INTO CADASTRO_ITEM_FISCAL\n(ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE,TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n('{{ $('Loop Over Items').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Loop Over Items').item.json.CST }}'\n  , '{{ $('Loop Over Items').item.json.NCM }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '02'\n  , '07'\n  , '9')\n\n\n\n"
+        "query": "SET NOCOUNT ON;\n\nINSERT INTO CADASTRO_ITEM_FISCAL\n(ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE,TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n('{{ $('Loop Over Items').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields 4').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Loop Over Items').item.json.CST }}'\n  , '{{ $('Loop Over Items').item.json.NCM }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '02'\n  , '07'\n  , '9')\n\n\n\n"
       },
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        8656,
-        960
+        8128,
+        4368
       ],
-      "id": "5b1d3ce4-2ebd-4b66-9946-b0c411ddd547",
+      "id": "29129077-eda7-4095-9c9d-05da4837f6c6",
       "name": "Microsoft SQL",
+      "retryOnFail": true,
+      "credentials": {
+        "microsoftSql": {
+          "id": "8rguz0R8o0fp0CrE",
+          "name": "SQL IB"
+        }
+      },
       "onError": "continueErrorOutput"
     },
     {
@@ -24,15 +31,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        3920,
-        1520
+        3392,
+        4928
       ],
-      "id": "7fa49fd9-7df7-4a8a-bb67-87f970dc1317",
+      "id": "d68fb659-f3c7-4631-9c35-d970d7ebc238",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "jbgPsIgjGxT5o9y2",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
         }
       }
     },
@@ -47,10 +54,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        7360,
-        800
+        6832,
+        4208
       ],
-      "id": "6725f91c-1cb6-4877-86cd-e9f56b790888",
+      "id": "5d788e41-13fd-4493-b689-0590174378ca",
       "name": "AI Agent1"
     },
     {
@@ -61,15 +68,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        7296,
-        1008
+        6768,
+        4416
       ],
-      "id": "9c434c7d-eed0-43e2-ac46-c992096266e7",
+      "id": "44a5d1bb-a1d0-44f9-9444-12d168478fce",
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "jbgPsIgjGxT5o9y2",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
         }
       }
     },
@@ -100,10 +107,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        7824,
-        800
+        7296,
+        4208
       ],
-      "id": "bf70d649-49f5-4bb4-8aef-ec4d3f059d6a",
+      "id": "830cce10-b914-4bd8-9392-d67d644e7437",
       "name": "If3"
     },
     {
@@ -114,25 +121,31 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        7104,
-        800
+        6576,
+        4208
       ],
-      "id": "01543dc8-5507-4058-a519-63005a285ee8",
+      "id": "853486fd-cb8c-4366-83a0-de9fa816cecb",
       "name": "Aggregate"
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO CADASTRO_ITEM_FISCAL\n(ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE,TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n('{{ $('Loop Over Items').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields2').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Loop Over Items').item.json.CST }}'\n  , '{{ $('Loop Over Items').item.json.NCM }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '2'\n  , '07'\n  , '9')"
+        "query": "INSERT INTO CADASTRO_ITEM_FISCAL\n(ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE,TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n('{{ $('Loop Over Items').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields 5').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Loop Over Items').item.json.CST }}'\n  , '{{ $('Loop Over Items').item.json.NCM }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '2'\n  , '07'\n  , '9')"
       },
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        8656,
-        1408
+        8128,
+        4816
       ],
-      "id": "f03b286e-cc22-4734-8ef2-d8129ad206d4",
+      "id": "dff35457-1af0-45f6-81a4-f80a3421d2de",
       "name": "Microsoft SQL2",
+      "credentials": {
+        "microsoftSql": {
+          "id": "OkN54iV2AMtgjIYk",
+          "name": "SQL TH"
+        }
+      },
       "onError": "continueErrorOutput"
     },
     {
@@ -146,10 +159,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        7360,
-        1264
+        6832,
+        4672
       ],
-      "id": "fde1df41-32ac-4e6d-aad2-1879bec9a441",
+      "id": "3f261da9-f6db-4959-b92e-2872fceee4b0",
       "name": "AI Agent2"
     },
     {
@@ -160,15 +173,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        7296,
-        1472
+        6768,
+        4880
       ],
-      "id": "2fc56a39-a5c3-42e0-8b2a-18e481a2159f",
+      "id": "63691b99-1db5-4af3-aade-eed12c09cfb0",
       "name": "Google Gemini Chat Model2",
       "credentials": {
         "googlePalmApi": {
-          "id": "jbgPsIgjGxT5o9y2",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
         }
       }
     },
@@ -199,10 +212,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        7808,
-        1264
+        7280,
+        4672
       ],
-      "id": "90fd5e5a-524c-4663-9995-067c14cde22f",
+      "id": "9db75fbf-9bc1-4321-b969-e1e68b5521c4",
       "name": "If4"
     },
     {
@@ -213,25 +226,31 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        7104,
-        1264
+        6576,
+        4672
       ],
-      "id": "dd4c55ce-e8a9-413b-8d11-b63f88f99b16",
+      "id": "6278e485-173c-4bb5-be8a-b597ffd4a054",
       "name": "Aggregate1"
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO CADASTRO_ITEM_FISCAL\n  (ITEM_DESCRICAO\n    , CODIGO_ITEM\n    , UNIDADE\n    , TRIBUT_ORIGEM\n    , CLASSIF_FISCAL\n    , CONTA_CONTABIL\n    , INDICADOR_CFOP\n    , ITEM_FISCAL_GRUPO\n    , TIPO_ITEM_SPED\n    , IDENT_UTILIZACAO_IMOB)\nVALUES\n  ('{{ $('Loop Over Items').item.json['Nome do item'] }}'\n    , '{{ $('Edit Fields3').item.json['Codigo do item'] }}'\n    , 'UN'\n    , '{{ $('Loop Over Items').item.json.CST }}'\n    , '{{ $('Loop Over Items').item.json.NCM }}'\n    , '{{ $json.numero_conta }}'\n    , '13'\n    , '03'\n    , '07'\n    , '9')"
+        "query": "INSERT INTO CADASTRO_ITEM_FISCAL\n  (ITEM_DESCRICAO\n    , CODIGO_ITEM\n    , UNIDADE\n    , TRIBUT_ORIGEM\n    , CLASSIF_FISCAL\n    , CONTA_CONTABIL\n    , INDICADOR_CFOP\n    , ITEM_FISCAL_GRUPO\n    , TIPO_ITEM_SPED\n    , IDENT_UTILIZACAO_IMOB)\nVALUES\n  ('{{ $('Loop Over Items').item.json['Nome do item'] }}'\n    , '{{ $('Edit Fields 6').item.json['Codigo do item'] }}'\n    , 'UN'\n    , '{{ $('Loop Over Items').item.json.CST }}'\n    , '{{ $('Loop Over Items').item.json.NCM }}'\n    , '{{ $json.numero_conta }}'\n    , '13'\n    , '03'\n    , '07'\n    , '9')"
       },
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        8656,
-        1920
+        8128,
+        5328
       ],
-      "id": "a6eec2e7-a718-454f-96c5-1bb27b406e47",
+      "id": "185deaaf-ec17-467e-bc4c-8abdb2c11a51",
       "name": "Microsoft SQL3",
+      "credentials": {
+        "microsoftSql": {
+          "id": "pDQfRZo44eKZeHAY",
+          "name": "SQL SL"
+        }
+      },
       "onError": "continueErrorOutput"
     },
     {
@@ -245,10 +264,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        7344,
-        1760
+        6816,
+        5168
       ],
-      "id": "7bba5d9c-ada6-4c78-a63b-5a3885a44572",
+      "id": "2aceb3f1-6999-49cf-b235-1c889781ee2a",
       "name": "AI Agent3"
     },
     {
@@ -259,15 +278,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        7280,
-        1968
+        6752,
+        5376
       ],
-      "id": "ec7cbc53-699f-4f3a-aa90-eae84cb04f23",
+      "id": "b2d12eae-b39b-41c9-974c-89e6ba3fea45",
       "name": "Google Gemini Chat Model3",
       "credentials": {
         "googlePalmApi": {
-          "id": "jbgPsIgjGxT5o9y2",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
         }
       }
     },
@@ -298,10 +317,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        7808,
-        1760
+        7280,
+        5168
       ],
-      "id": "94447484-2079-4b00-86a8-0973045c581f",
+      "id": "972263a1-0b22-46ae-8886-9b4e71f46f36",
       "name": "If5"
     },
     {
@@ -312,10 +331,10 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        7088,
-        1760
+        6560,
+        5168
       ],
-      "id": "17182ec9-d403-43cf-b3a1-a528551ce22c",
+      "id": "c0c80dcd-d09c-4fe6-bf88-15932f54f796",
       "name": "Aggregate2"
     },
     {
@@ -327,11 +346,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        7264,
-        688
+        6736,
+        4096
       ],
       "typeVersion": 1,
-      "id": "4d79ab18-85ff-46bf-be11-9121ae25c476",
+      "id": "13d8ef0c-5004-4665-917e-20ef8f27cf5a",
       "name": "Sticky Note"
     },
     {
@@ -355,15 +374,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6064,
-        1760
+        5536,
+        5168
       ],
-      "id": "2876e86d-7a9c-41e8-b1da-f7c5523689eb",
+      "id": "49bb703a-80ca-4040-b362-a6787386012c",
       "name": "Planilha de códigos de itens salinas",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -388,15 +407,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6080,
-        1264
+        5552,
+        4672
       ],
-      "id": "226f6293-f8f2-4857-96d2-77b0a70559e0",
+      "id": "27d45cf1-6e24-40fc-bb3b-f2fdb2e64572",
       "name": "Planilha de código de itens Tommy",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -421,15 +440,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6080,
-        800
+        5552,
+        4208
       ],
-      "id": "0810b295-3e08-460d-a600-b211b3a930ce",
+      "id": "5edffc27-0e9f-4905-83c9-df685013ff49",
       "name": "Planilha de código de itens Inbrands",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -454,15 +473,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6848,
-        800
+        6320,
+        4208
       ],
-      "id": "b03e0a6d-afae-4bc5-b27a-44bf8be60b0b",
+      "id": "64c9ddf3-d5f4-433a-b4de-0ae9808d4c77",
       "name": "Contas contábeis IB",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -487,15 +506,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6816,
-        1264
+        6288,
+        4672
       ],
-      "id": "c1dc6fca-e359-4a99-942f-071d7bc0a819",
+      "id": "72d2b49c-c020-4aa7-965e-07fceb377064",
       "name": "Contas contábeis TH",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -520,15 +539,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6832,
-        1760
+        6304,
+        5168
       ],
-      "id": "49608185-c08f-42c7-8d1e-f4e2ea69a384",
+      "id": "bef4ad79-8567-4a3d-ad96-6d1c3e25a05d",
       "name": "Contas contábeis SL",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -584,15 +603,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8928,
-        1920
+        8400,
+        5328
       ],
-      "id": "7bc179c0-df07-4e05-b525-9fe4025934bd",
+      "id": "9f39c4b1-d020-4cb6-a7a1-aee7793bc1df",
       "name": "Planilha para adicionar o item cadastrado SL",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -648,15 +667,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8944,
-        1408
+        8416,
+        4816
       ],
-      "id": "1a28fd59-82d8-45e3-9e2e-a52a4d9bccb8",
+      "id": "dc629fe9-8d67-4048-95bd-72fd1ce3c3eb",
       "name": "Planilha para adicionar o item cadastrado TH",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -712,15 +731,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8960,
-        960
+        8432,
+        4368
       ],
-      "id": "f4d9e1b6-b2e4-4151-9d34-3dd50d4bb406",
+      "id": "babad4f4-2b97-4bb0-84d3-1d55448a67b6",
       "name": "Planilha para adicionar o item cadastrado IB",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -733,11 +752,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4032,
-        848
+        3504,
+        4256
       ],
       "typeVersion": 1,
-      "id": "4dbe31d8-3e1d-4022-bce4-c291e3a78953",
+      "id": "36a0959e-3c65-4288-a983-653d945d2dca",
       "name": "Sticky Note1"
     },
     {
@@ -749,11 +768,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        8608,
-        720
+        8080,
+        4128
       ],
       "typeVersion": 1,
-      "id": "65467c9b-cd54-487b-a7ac-2c905721c461",
+      "id": "8e3f3194-87d4-45de-9ec2-73ff84930323",
       "name": "Sticky Note2"
     },
     {
@@ -765,11 +784,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        3904,
-        1168
+        3376,
+        4576
       ],
       "typeVersion": 1,
-      "id": "c5aade5e-05cf-4add-b54e-92d5a77503e4",
+      "id": "a1cc5250-aff4-4836-af0b-f1af35fc358b",
       "name": "Sticky Note6"
     },
     {
@@ -777,16 +796,16 @@
         "promptType": "define",
         "text": "=Nome do item: {{ $json['Nome do item'] }}\n\nNCM informado do item: {{ $json.NCM }}",
         "options": {
-          "systemMessage": " Você é um agente de IA responsável APENAS por validar se um código NCM é compatível com o nome de um produto.\n\nVocê SEMPRE receberá um nome de produto e um código NCM.\n\nREGRA FUNDAMENTAL\nSe o nome do produto descrever claramente um tipo de mercadoria que exista na NCM informada, você DEVE considerar o NCM como compatível, mesmo que a descrição seja curta ou genérica.\n\nVocê NÃO pode exigir informações adicionais além do nome do produto.\nVocê NÃO pode recusar um NCM apenas por falta de detalhamento de uso, aplicação ou contexto.\n\nItens descritos apenas por material e forma (ex: ganchos de ferro, parafusos de aço, chapas metálicas, suportes metálicos) DEVEM ser tratados como bens de uso geral.\n\nSomente considere INCORRETO se o nome do produto for claramente incompatível com o NCM informado.\n\nSAÍDA\nResponda APENAS com:\nVERDADEIRO\nou\nFALSO\n\nNão escreva mais nada."
+          "systemMessage": "Você é responsável apenas por verificar se um NCM é claramente incompatível com um produto.\n\nNão faça análise técnica detalhada.\n\nConsidere o NCM compatível sempre que houver qualquer plausibilidade razoável.\n\nSomente responda FALSO quando o produto e o NCM forem evidentemente de naturezas totalmente diferentes.\n\nSe não for claramente absurdo, responda VERDADEIRO.\n\nResponda apenas com:\n\nVERDADEIRO\nou\nFALSO\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        3936,
-        1296
+        3408,
+        4704
       ],
-      "id": "fb9d66a2-0a07-41d6-8c04-dcf44897d805",
+      "id": "52a63a22-0b6f-4620-977a-e0e7d79f1466",
       "name": "Decisão NCM"
     },
     {
@@ -897,10 +916,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        4800,
-        1248
+        4272,
+        4656
       ],
-      "id": "d90764aa-a0cd-4e40-bdda-d1fa4ee374ed",
+      "id": "8c49bf69-74e7-4ff1-b68d-4a131a3a12a5",
       "name": "Decisão do Banco de dados"
     },
     {
@@ -911,11 +930,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        8032,
-        464
+        7504,
+        3872
       ],
       "typeVersion": 1,
-      "id": "8776a504-851a-4bd7-b7dd-ff0ebd34098d",
+      "id": "80cd0948-27d8-40bc-8621-efa0f9709f77",
       "name": "Sticky Note7"
     },
     {
@@ -926,11 +945,17 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        5392,
-        736
+        4864,
+        4144
       ],
-      "id": "d411d730-2fb3-406e-a2a4-4bbdc5c17b83",
-      "name": "Microsoft SQL4"
+      "id": "88097f02-6243-4cc8-8bd1-8b30ce0b23e1",
+      "name": "Microsoft SQL4",
+      "credentials": {
+        "microsoftSql": {
+          "id": "8rguz0R8o0fp0CrE",
+          "name": "SQL IB"
+        }
+      }
     },
     {
       "parameters": {
@@ -959,10 +984,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        5616,
-        736
+        5088,
+        4144
       ],
-      "id": "780362af-c615-4339-a7d5-c85790f15d60",
+      "id": "5a89fedb-572c-4cc6-bfa3-efd392fcf26c",
       "name": "If6"
     },
     {
@@ -973,11 +998,17 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        5392,
-        1264
+        4864,
+        4672
       ],
-      "id": "1e0d7b65-4a5a-46e4-b4ea-868f1a205876",
-      "name": "Microsoft SQL8"
+      "id": "7bd93bfd-984e-4e1d-93d0-5732aaeb6597",
+      "name": "Microsoft SQL8",
+      "credentials": {
+        "microsoftSql": {
+          "id": "OkN54iV2AMtgjIYk",
+          "name": "SQL TH"
+        }
+      }
     },
     {
       "parameters": {
@@ -1006,10 +1037,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        5632,
-        1264
+        5104,
+        4672
       ],
-      "id": "3c0a835a-355b-42e4-8646-915f5c11014e",
+      "id": "0b8d9316-c167-4b1a-a802-d1763443abb8",
       "name": "If8"
     },
     {
@@ -1020,11 +1051,17 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        5408,
-        1760
+        4880,
+        5168
       ],
-      "id": "dbccc8bf-8a3a-48ff-9d8c-08c7f3aadf6b",
-      "name": "Microsoft SQL6"
+      "id": "58f62a20-341b-4750-af42-382b60e3c6ef",
+      "name": "Microsoft SQL6",
+      "credentials": {
+        "microsoftSql": {
+          "id": "pDQfRZo44eKZeHAY",
+          "name": "SQL SL"
+        }
+      }
     },
     {
       "parameters": {
@@ -1053,10 +1090,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        5616,
-        1760
+        5088,
+        5168
       ],
-      "id": "f91607bd-138f-4d50-aa74-37debc0a9962",
+      "id": "c2fe1631-65d8-4fec-bd4a-21a14ee6a27b",
       "name": "If7"
     },
     {
@@ -1066,10 +1103,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6336,
-        800
+        5808,
+        4208
       ],
-      "id": "8f84e11a-1f5c-4f01-8584-a16f3595a675",
+      "id": "6b850b04-a824-4fcd-bf87-0456b406ae6a",
       "name": "Código para separar String de int"
     },
     {
@@ -1079,10 +1116,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6336,
-        1760
+        5808,
+        5168
       ],
-      "id": "c51fde77-2d98-4ced-8b2c-3a96b8dbfba3",
+      "id": "3f8e4b58-bf3a-4887-aab1-46417d829c38",
       "name": "Código para separar String de int1"
     },
     {
@@ -1092,10 +1129,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6336,
-        1264
+        5808,
+        4672
       ],
-      "id": "984fc846-6574-4547-b177-d60c96675354",
+      "id": "ccc5277a-adde-4327-a5aa-a1d60bd2c821",
       "name": "Código para separa String de int"
     },
     {
@@ -1105,10 +1142,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8368,
-        1920
+        7840,
+        5328
       ],
-      "id": "817591ee-39cd-4da1-abd8-1c3e515a3619",
+      "id": "045dd888-4738-4f96-ac4d-f6bcc4147551",
       "name": "Cria o output em JSON 3"
     },
     {
@@ -1118,10 +1155,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8368,
-        1408
+        7840,
+        4816
       ],
-      "id": "67011826-03c4-40c6-a3dc-a81c5ce75308",
+      "id": "2c840360-f1b3-4814-b947-653281f4ba69",
       "name": "Cria o output em JSON 2"
     },
     {
@@ -1131,10 +1168,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8384,
-        960
+        7856,
+        4368
       ],
-      "id": "ac6062a8-0c08-43a4-a5f8-877bc60b6ae7",
+      "id": "75a39688-35fc-4fde-8ce0-e4fc27ec9aef",
       "name": "Code in JavaScript"
     },
     {
@@ -1142,10 +1179,10 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        2304,
-        3136
+        1776,
+        6544
       ],
-      "id": "b54d0996-b844-4891-a207-5ca8eb74110e",
+      "id": "d3266036-48db-4fc5-b4cb-84c2663c985a",
       "name": "When clicking ‘Execute workflow’"
     },
     {
@@ -1210,15 +1247,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2720,
-        3136
+        2192,
+        6544
       ],
-      "id": "0070e144-3a0b-4df5-a210-232c8db90a3d",
+      "id": "62909079-5e4c-49ac-aded-1927a5566af9",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -1230,11 +1267,17 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        2512,
-        2976
+        1984,
+        6384
       ],
-      "id": "e2ad8fd2-9af3-421d-a640-4e1b5e399550",
-      "name": "Microsoft SQL1"
+      "id": "6da9e084-4cc8-4911-b735-5c6f7f814082",
+      "name": "Microsoft SQL1",
+      "credentials": {
+        "microsoftSql": {
+          "id": "OkN54iV2AMtgjIYk",
+          "name": "SQL TH"
+        }
+      }
     },
     {
       "parameters": {
@@ -1300,15 +1343,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2720,
-        2976
+        2192,
+        6384
       ],
-      "id": "7ba16d43-68d2-4531-9e75-b4b023c416f8",
+      "id": "7c168104-fce9-423b-b1d5-4bfb8f614efd",
       "name": "Append row in sheet1",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -1374,15 +1417,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2720,
-        3296
+        2192,
+        6704
       ],
-      "id": "555fb4a9-e60c-41ab-839d-1abe74183be1",
+      "id": "343abfe0-259f-455e-a396-3b312eb7200c",
       "name": "Append row in sheet2",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8kdqwiZxQAl0uvOH",
-          "name": "Google Sheets account"
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
         }
       }
     },
@@ -1394,11 +1437,17 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        2512,
-        3136
+        1984,
+        6544
       ],
-      "id": "ee9d2f18-d3bc-4fed-b122-c737969c3ec2",
-      "name": "Microsoft SQL5"
+      "id": "0b04c697-15da-48a0-a371-30be906c5b1d",
+      "name": "Microsoft SQL5",
+      "credentials": {
+        "microsoftSql": {
+          "id": "OkN54iV2AMtgjIYk",
+          "name": "SQL TH"
+        }
+      }
     },
     {
       "parameters": {
@@ -1408,11 +1457,17 @@
       "type": "n8n-nodes-base.microsoftSql",
       "typeVersion": 1.1,
       "position": [
-        2512,
-        3296
+        1984,
+        6704
       ],
-      "id": "c70f62dc-80cd-434b-ab20-6306c9664f4c",
-      "name": "Microsoft SQL7"
+      "id": "030607e6-20e1-40b4-af1f-332e34ad0e5d",
+      "name": "Microsoft SQL7",
+      "credentials": {
+        "microsoftSql": {
+          "id": "OkN54iV2AMtgjIYk",
+          "name": "SQL TH"
+        }
+      }
     },
     {
       "parameters": {
@@ -1423,10 +1478,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2144,
-        2816
+        1616,
+        6224
       ],
-      "id": "91fd8d5c-e6d5-4f92-aaca-2d3bd583d747",
+      "id": "dab9d1e4-e965-4a2d-bcac-1cf392ca8623",
       "name": "Sticky Note10"
     },
     {
@@ -1449,14 +1504,14 @@
       "type": "n8n-nodes-base.gmailTrigger",
       "typeVersion": 1.3,
       "position": [
-        2192,
-        1296
+        1664,
+        4704
       ],
-      "id": "2d7ceb91-5292-49e3-a26d-a7fae1c3c503",
+      "id": "f39862fb-76bb-4cd3-b065-d883ec650c35",
       "name": "Gmail Trigger",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1469,15 +1524,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2400,
-        1120
+        1872,
+        4528
       ],
-      "id": "31b9f21f-3090-4ee7-baf3-749245b13a9a",
+      "id": "4d858f6a-adbe-4c5a-bcd6-7d169f771c73",
       "name": "Mark a message as read",
       "webhookId": "032fe5b2-f2ec-44c3-a0c1-3b6ac138642c",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1490,10 +1545,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        2624,
-        1296
+        2096,
+        4704
       ],
-      "id": "63d6acfa-4ad4-469a-aff8-087881ba5cc7",
+      "id": "ffe0008e-3cf2-46c6-86a4-855a9b828fe2",
       "name": "Extract from File"
     },
     {
@@ -1506,10 +1561,10 @@
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        2832,
-        1296
+        2304,
+        4704
       ],
-      "id": "c4da1e7c-381a-47d5-81c3-1102d67207c8",
+      "id": "42f78efc-563e-4877-ab81-0ffeaa7711c8",
       "name": "Information Extractor"
     },
     {
@@ -1522,15 +1577,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        2816,
-        1504
+        2288,
+        4912
       ],
-      "id": "877dbf30-2fa9-458b-9384-c1b4e5df272e",
+      "id": "78840fd5-e2a9-4394-a6d9-0f63c3452967",
       "name": "Google Gemini Chat Model4",
       "credentials": {
         "googlePalmApi": {
-          "id": "jbgPsIgjGxT5o9y2",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
         }
       }
     },
@@ -1561,10 +1616,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        4448,
-        1296
+        3920,
+        4704
       ],
-      "id": "93e52aca-f8fc-4482-947a-e7bc455eb29e",
+      "id": "1e0d5a4e-f0bf-4e95-871d-61153c241ff4",
       "name": "If"
     },
     {
@@ -1576,11 +1631,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4528,
-        1440
+        4000,
+        4848
       ],
       "typeVersion": 1,
-      "id": "106a7264-2b7f-40c9-af1e-bb08ae21ae99",
+      "id": "6465bf4c-43ca-4732-94ef-ce351db66f1f",
       "name": "Sticky Note4"
     },
     {
@@ -1592,10 +1647,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        3168,
-        1296
+        2640,
+        4704
       ],
-      "id": "6311ea01-8972-43c1-a1b2-072b108ee703",
+      "id": "e0f7187b-b5a6-45f7-ad17-6d168b117ef2",
       "name": "Split Out"
     },
     {
@@ -1605,10 +1660,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        3664,
-        1296
+        3136,
+        4704
       ],
-      "id": "e8248fbb-2649-4486-b66c-5161b9e88c29",
+      "id": "ed7911f7-0ab6-41b8-a7bf-67458839feac",
       "name": "Loop Over Items"
     },
     {
@@ -1621,15 +1676,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        4096,
-        976
+        3568,
+        4384
       ],
-      "id": "26193443-0359-4c29-9ce6-20e7ba9a86d0",
+      "id": "0603c4f2-d35b-46e5-87bd-516c840067fb",
       "name": "Reply to a message1",
       "webhookId": "76896a78-2e21-4f5f-ae89-9c76a0420b5b",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1642,10 +1697,10 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        3872,
-        976
+        3344,
+        4384
       ],
-      "id": "f1ba861f-1440-4e9f-9544-b39e9f6b12d4",
+      "id": "33b645f5-f3f7-4fe5-97c0-c52b15f179a0",
       "name": "Aggregate3"
     },
     {
@@ -1657,10 +1712,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4928,
-        1728
+        4400,
+        5136
       ],
-      "id": "4af2616f-cd2e-403c-836f-1a54b6c0ab4d",
+      "id": "5aac1769-f914-43fe-aac6-5b3aabb1a3a9",
       "name": "Sticky Note3"
     },
     {
@@ -1672,10 +1727,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        5328,
-        640
+        4800,
+        4048
       ],
-      "id": "8efe5f50-d1e1-402c-891f-02a7529f6bdd",
+      "id": "3c7de529-8aaf-48a5-917e-3b5605224b69",
       "name": "Sticky Note5"
     },
     {
@@ -1688,10 +1743,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2592,
-        1168
+        2064,
+        4576
       ],
-      "id": "fa26cc00-cf1d-4565-8de0-68a427c7ac90",
+      "id": "3b8f8a38-1f38-46e4-948f-2ccec60654e6",
       "name": "Sticky Note11"
     },
     {
@@ -1704,10 +1759,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2800,
-        1136
+        2272,
+        4544
       ],
-      "id": "d0efaec5-083f-40fd-b314-14a7b7fec0ad",
+      "id": "430000c5-89c9-477a-ae03-11342fecdb51",
       "name": "Sticky Note12"
     },
     {
@@ -1720,10 +1775,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2096,
-        416
+        1568,
+        3824
       ],
-      "id": "284f0d45-4a47-45e1-ab4d-a60771d5d037",
+      "id": "4e7d325f-d49b-4f9e-8334-d5a559840ab7",
       "name": "Sticky Note8"
     },
     {
@@ -1736,15 +1791,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2400,
-        1520
+        1872,
+        4928
       ],
-      "id": "3078e0ce-0623-4010-b74a-6a8181cfd5c4",
+      "id": "4232ef3a-8a0a-4de4-8253-9d850ae99b6f",
       "name": "Reply to a message",
       "webhookId": "2bc31233-fada-432a-b6ef-c6908e2ffdd0",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1759,15 +1814,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        4608,
-        1616
+        4080,
+        5024
       ],
-      "id": "79577c87-9a5f-4399-8710-9c09fd62dd2e",
+      "id": "0af73d3c-ef9b-4af5-994e-f47f742ead96",
       "name": "Reply to a message2",
       "webhookId": "3eac3d97-a0a1-4b9c-8e72-cf0fc1439094",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1782,15 +1837,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        4992,
-        1856
+        4464,
+        5264
       ],
-      "id": "182cf402-769c-4ceb-a215-71b1bf9d95cc",
+      "id": "cdc9a30a-62b3-4963-be4f-7a0a1730642c",
       "name": "Reply to a message3",
       "webhookId": "66237d11-1b98-45c9-bb19-1214cc863412",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1805,15 +1860,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        8096,
-        720
+        7568,
+        4128
       ],
-      "id": "44d0a094-271c-428b-a315-c9d28bd76d27",
+      "id": "f8cc84a6-b6f5-42f9-8807-fc089ee51032",
       "name": "Reply to a message4",
       "webhookId": "706be682-e606-4889-a263-b32700dab2dc",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1828,15 +1883,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        5888,
-        624
+        5360,
+        4032
       ],
-      "id": "f73d5ad9-1562-454e-9550-2158a5240a2e",
+      "id": "a27c6d64-9695-4c19-a86f-183106187bd7",
       "name": "Send a message",
       "webhookId": "1508721f-5722-45c2-abf3-3f9b5e8e4d6f",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1851,15 +1906,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        8960,
-        1152
+        8432,
+        4560
       ],
-      "id": "576b4350-359d-41e7-b7d7-589f900fe8b8",
+      "id": "7162b00e-70af-4ad7-a0d7-8bf55d060b2e",
       "name": "Send a message1",
       "webhookId": "7a4f73f5-dfc0-4036-bfeb-84b1e3da556e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1868,21 +1923,21 @@
       "parameters": {
         "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
         "subject": "Código do item repetido",
-        "message": "=Olá!\n\nO codigo de item <strong>{{ $('Edit Fields 4').item.json['Codigo do item'] }}</strong> ele ja foi cadastrado,\nPor favor, cadastrar o item manualmente com o codigo correto, e depois atualizar a planilha de cadastro de itens com o novo código.\n\nSegue dados:\n\nDescrição do item: {{ $('Edit Fields 2').item.json['Nome do item'] }}\n\nCom o NCM: {{ $('Edit Fields 2').item.json.NCM }}\n\nCom o CST: {{ $('Edit Fields 2').item.json.CST }}\n\nE com a conta contábil: {{ $('Code in JavaScript').item.json.numero_conta }}",
+        "message": "=Olá!\n<br><br>\nO codigo de item <strong>{{ $('Edit Fields 4').item.json['Codigo do item'] }}</strong> ele ja foi cadastrado,\n<br><br>Por favor, cadastrar o item manualmente com o codigo correto, e depois atualizar a planilha de cadastro de itens com o novo código.\n<br><br>\nSegue dados:\n<br><br>\nDescrição do item: {{ $('Edit Fields 2').item.json['Nome do item'] }}\n<br><br>\nCom o NCM: {{ $('Edit Fields 2').item.json.NCM }}\n<br><br>\nCom o CST: {{ $('Edit Fields 2').item.json.CST }}\n<br><br>\nE com a conta contábil: {{ $('Code in JavaScript').item.json.numero_conta }}",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        8944,
-        1600
+        8416,
+        5008
       ],
-      "id": "6b446df1-96f3-4b48-80e1-4d6ab17e43f6",
+      "id": "21f635ba-13f6-43e8-bd6d-bbaf58e7c5f9",
       "name": "Send a message2",
       "webhookId": "7a4f73f5-dfc0-4036-bfeb-84b1e3da556e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1897,15 +1952,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        8928,
-        2112
+        8400,
+        5520
       ],
-      "id": "468de7f2-979e-4ce6-ae15-dcd6419bb8fa",
+      "id": "4f8cd8ff-0e5d-47d0-8208-37f98ad91fed",
       "name": "Send a message3",
       "webhookId": "7a4f73f5-dfc0-4036-bfeb-84b1e3da556e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1920,15 +1975,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        8096,
-        1184
+        7568,
+        4592
       ],
-      "id": "bef655eb-d176-4530-9886-a7312466fecf",
+      "id": "569daed5-4d8f-4600-8be8-8a3d31151205",
       "name": "Reply to a message5",
       "webhookId": "706be682-e606-4889-a263-b32700dab2dc",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1943,15 +1998,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        8096,
-        1632
+        7568,
+        5040
       ],
-      "id": "3cffe81a-bff4-42d9-ab8f-a384353fe7d3",
+      "id": "3a027317-ddd2-4eda-951c-6d010b6e8f0e",
       "name": "Reply to a message6",
       "webhookId": "706be682-e606-4889-a263-b32700dab2dc",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1966,15 +2021,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        5856,
-        1168
+        5328,
+        4576
       ],
-      "id": "e50aa128-2731-4036-a8a6-873260420392",
+      "id": "5ed91ac4-62cd-4ba8-a988-24c94468d9f2",
       "name": "Send a message4",
       "webhookId": "1508721f-5722-45c2-abf3-3f9b5e8e4d6f",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -1989,15 +2044,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        5840,
-        1664
+        5312,
+        5072
       ],
-      "id": "8c472623-14e0-4871-a8d6-93567fe09cc7",
+      "id": "a2de6376-b4a7-4f45-9615-cd735f37d061",
       "name": "Send a message5",
       "webhookId": "1508721f-5722-45c2-abf3-3f9b5e8e4d6f",
       "credentials": {
         "gmailOAuth2": {
-          "id": "6C2ysOBDDWfGgE2B",
+          "id": "te8Ze3Cr0yJGQtzs",
           "name": "Gmail account"
         }
       }
@@ -2019,10 +2074,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6576,
-        800
+        6048,
+        4208
       ],
-      "id": "8c7960b3-00fd-404f-a0c5-4f4d891819d4",
+      "id": "db8f8508-1a54-4220-a999-f48022d20c71",
       "name": "Edit Fields 4"
     },
     {
@@ -2042,10 +2097,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4256,
-        1296
+        3728,
+        4704
       ],
-      "id": "3635fd52-64b0-46fd-8f20-066cee817daa",
+      "id": "6adb12d4-0665-4e2f-903f-de319dfbb91c",
       "name": "Edit Fields 3"
     },
     {
@@ -2095,10 +2150,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3408,
-        1296
+        2880,
+        4704
       ],
-      "id": "90bb4317-6f39-49d5-acc3-b14668a22da5",
+      "id": "7ac5ced5-4ac6-4bf7-9b11-2379bdb951d3",
       "name": "Edit Fields 2"
     },
     {
@@ -2136,10 +2191,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2400,
-        1296
+        1872,
+        4704
       ],
-      "id": "34dc8abc-deb6-48f4-907b-2eff0559707b",
+      "id": "47c62d53-2787-4cd5-8cd0-1694a497f363",
       "name": "Edit Fields 1",
       "onError": "continueErrorOutput"
     },
@@ -2160,10 +2215,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6560,
-        1264
+        6032,
+        4672
       ],
-      "id": "0c188375-ca67-413a-8cf0-6bd43674deb6",
+      "id": "f14933b2-b049-442d-9a29-86a562ea4bad",
       "name": "Edit Fields 5"
     },
     {
@@ -2183,14 +2238,36 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6592,
-        1760
+        6064,
+        5168
       ],
-      "id": "25b7f913-74fa-4d8c-b1c9-706497f7b7d7",
+      "id": "23730211-1dae-4793-9e1e-0481cac9bc81",
       "name": "Edit Fields 6"
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Information Extractor": [
+      {
+        "json": {
+          "output": {
+            "cnpj": "09.054.385/0001-44",
+            "emissor": "LUIZ HENRIQUE CUIN 06024390866",
+            "itens": [
+              {
+                "nome_item": "Reforma Mobiliario Vitrine IF 6647177",
+                "ncm": "94036000",
+                "cst": "102",
+                "CFOP": "5.102"
+              }
+            ]
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "connections": {
     "Google Gemini Chat Model": {
       "ai_languageModel": [
@@ -2949,6 +3026,11 @@
           }
         ]
       ]
+    },
+    "Mark a message as read": {
+      "main": [
+        []
+      ]
     }
   },
   "active": false,
@@ -2956,17 +3038,17 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "7629fd91-8ad6-4d61-b344-76032b8e7805",
+  "versionId": "8ee7b4a2-65dc-4b8e-a69c-21d093b03d8b",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "a9dfd0acbb8262042acf20bd8e87246f186841e2cce4fb92bf2575b90748f88c"
+    "instanceId": "c9ac0336281178410ae1caf9c0c4bc6510509f0f05a469f30c634bd9ecc77f35"
   },
-  "id": "xCpbwf44khr8BrJ2jOHzJ",
+  "id": "yr23QBaxXpVDy6cS3mFRo",
   "tags": [
     {
-      "updatedAt": "2026-03-02T00:06:48.773Z",
-      "createdAt": "2026-03-02T00:06:48.773Z",
-      "id": "VHcBGYy1nfsiGueH",
+      "updatedAt": "2026-02-10T01:45:31.626Z",
+      "createdAt": "2026-02-10T01:45:31.626Z",
+      "id": "YilRmVmeVnaYqnNc",
       "name": "Cadastro de itens"
     }
   ]
