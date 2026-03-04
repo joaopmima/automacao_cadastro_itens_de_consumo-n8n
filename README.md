@@ -1,5 +1,3 @@
-# automa-o_cadastro_itens_de_consumo-n8n
-
 # Automação Inteligente de Cadastro de Itens
 
 Sistema de automação para cadastro completo de itens a partir de e-mails com anexos em PDF, utilizando extração estruturada de dados com inteligência artificial, validação fiscal de NCM, classificação contábil automatizada e inserção direta em banco de dados.
