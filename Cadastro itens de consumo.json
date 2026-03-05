@@ -1,0 +1,1876 @@
+{
+  "name": "Cadastro itens de consumo",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Automação via formulário",
+        "height": 2272,
+        "width": 4768,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3232,
+        4480
+      ],
+      "id": "40a39204-2b4b-465f-969e-a246a81d8c87",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = $input.first().json.output\nconst contas = $('Aggregate6').first().json.data\n\n// ===========================\n// 1 - Extrair JSON do texto\n// ===========================\n\nconst match = rawOutput.match(/\\{[\\s\\S]*?\\}/);\n\nif (!match) {\n  return [{ json: { numero_conta: false } }];\n}\n\nlet parsed;\n\ntry {\n  parsed = JSON.parse(match[0]);\n} catch {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 2 - Verificar ID retornado\n// ===========================\n\nconst idConta = parsed.id_conta;\n\nif (!idConta || idConta === \"false\") {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 3 - Buscar no array\n// ===========================\n\nconst contaEncontrada = contas.find(c => Number(c.ID) === Number(idConta));\n\nif (!contaEncontrada) {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 4 - Retornar número da conta\n// ===========================\n\nreturn [\n  {\n    json: {\n      numero_conta: contaEncontrada[\"Numero Conta\"]\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6592,
+        5024
+      ],
+      "id": "42a34399-d436-4eec-b870-b83fda0db9b1",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = $input.first().json.output\nconst contas = $('Aggregate5').first().json.data\n\n// ===========================\n// 1 - Extrair JSON do texto\n// ===========================\n\nconst match = rawOutput.match(/\\{[\\s\\S]*?\\}/);\n\nif (!match) {\n  return [{ json: { numero_conta: false } }];\n}\n\nlet parsed;\n\ntry {\n  parsed = JSON.parse(match[0]);\n} catch {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 2 - Verificar ID retornado\n// ===========================\n\nconst idConta = parsed.id_conta;\n\nif (!idConta || idConta === \"false\") {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 3 - Buscar no array\n// ===========================\n\nconst contaEncontrada = contas.find(c => Number(c.ID) === Number(idConta));\n\nif (!contaEncontrada) {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 4 - Retornar número da conta\n// ===========================\n\nreturn [\n  {\n    json: {\n      numero_conta: contaEncontrada[\"Numero Conta\"]\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6592,
+        5696
+      ],
+      "id": "b2bb35b0-a1d0-469a-9275-c1fabf4edf73",
+      "name": "Cria o output em JSON "
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = $input.first().json.output\nconst contas = $('Aggregate4').first().json.data\n\n// ===========================\n// 1 - Extrair JSON do texto\n// ===========================\n\nconst match = rawOutput.match(/\\{[\\s\\S]*?\\}/);\n\nif (!match) {\n  return [{ json: { numero_conta: false } }];\n}\n\nlet parsed;\n\ntry {\n  parsed = JSON.parse(match[0]);\n} catch {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 2 - Verificar ID retornado\n// ===========================\n\nconst idConta = parsed.id_conta;\n\nif (!idConta || idConta === \"false\") {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 3 - Buscar no array\n// ===========================\n\nconst contaEncontrada = contas.find(c => Number(c.ID) === Number(idConta));\n\nif (!contaEncontrada) {\n  return [{ json: { numero_conta: false } }];\n}\n\n// ===========================\n// 4 - Retornar número da conta\n// ===========================\n\nreturn [\n  {\n    json: {\n      numero_conta: contaEncontrada[\"Numero Conta\"]\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6592,
+        6400
+      ],
+      "id": "d5bd3022-e2aa-40d3-b62b-f505cf4552ac",
+      "name": "Cria o output em JSON 4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1️⃣ Remove itens sem código\nconst itensValidos = items.filter(\n  item => item.json['Codigo do item']\n);\n\n// Segurança: se não houver nenhum código válido\nif (itensValidos.length === 0) {\n  return [{\n    json: { erro: \"SEM_CODIGO_VALIDO\" }\n  }];\n}\n\n// 2️⃣ Pega o ÚLTIMO item da planilha\nconst ultimoItem = itensValidos[itensValidos.length - 1];\nconst ultimoCodigo = ultimoItem.json['Codigo do item'];\n\n// 3️⃣ Extrai letras e números\nconst match = ultimoCodigo.match(/^([A-Za-z]+)(\\d+)$/);\n\nif (!match) {\n  ultimoItem.json.erro = \"FORMATO_INVALIDO\";\n  return itensValidos;\n}\n\nconst prefixo = match[1];\nconst numeroAtual = parseInt(match[2], 10);\n\n// 4️⃣ Incrementa o número\nconst novoNumero = numeroAtual + 1;\n\n// 5️⃣ Mantém zeros à esquerda\nconst tamanhoNumero = match[2].length;\nconst novoNumeroFormatado = String(novoNumero).padStart(tamanhoNumero, '0');\n\n// 6️⃣ Novo código\nconst novoCodigo = `${prefixo}${novoNumeroFormatado}`;\n\n// 7️⃣ Salva no ÚLTIMO item\nultimoItem.json.novo_codigo = novoCodigo;\n\n// 8️⃣ Retorna APENAS o último item (evita apagar outros)\nreturn [ultimoItem];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        5552
+      ],
+      "id": "94127d09-fc99-4b1f-8907-31b11df48785",
+      "name": "Código para separa String de int1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1️⃣ Remove itens sem código\nconst itensValidos = items.filter(\n  item => item.json['Codigo do item']\n);\n\n// Segurança: se não houver nenhum código válido\nif (itensValidos.length === 0) {\n  return [{\n    json: { erro: \"SEM_CODIGO_VALIDO\" }\n  }];\n}\n\n// 2️⃣ Pega o ÚLTIMO item da planilha\nconst ultimoItem = itensValidos[itensValidos.length - 1];\nconst ultimoCodigo = ultimoItem.json['Codigo do item'];\n\n// 3️⃣ Extrai prefixo e versão (ex: IF14.0.16)\nconst match = ultimoCodigo.match(/^([A-Za-z]+)(\\d+(?:\\.\\d+)*)$/);\n\nif (!match) {\n  ultimoItem.json.erro = \"FORMATO_INVALIDO\";\n  return [ultimoItem];\n}\n\nconst prefixo = match[1];\nconst versao = match[2];\n\n// 4️⃣ Quebra a versão em partes numéricas\nconst partes = versao.split('.').map(n => parseInt(n, 10));\n\n// 5️⃣ Incrementa APENAS a última parte\npartes[partes.length - 1] += 1;\n\n// 6️⃣ Reconstrói a versão\nconst novaVersao = partes.join('.');\n\n// 7️⃣ Novo código\nconst novoCodigo = `${prefixo}${novaVersao}`;\n\n// 8️⃣ Salva no ÚLTIMO item\nultimoItem.json.novo_codigo = novoCodigo;\n\n// 9️⃣ Retorna APENAS o último item\nreturn [ultimoItem];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        6240
+      ],
+      "id": "6dca4166-1b23-4c1f-bf1c-ec2ca4c00f90",
+      "name": "Código para separar String de int2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1️⃣ Remove itens sem código\nconst itensValidos = items.filter(\n  item => item.json['Codigo do item']\n);\n\n// Segurança: se não houver nenhum código válido\nif (itensValidos.length === 0) {\n  return [{\n    json: { erro: \"SEM_CODIGO_VALIDO\" }\n  }];\n}\n\n// 2️⃣ Pega o ÚLTIMO item da planilha\nconst ultimoItem = itensValidos[itensValidos.length - 1];\nconst ultimoCodigo = ultimoItem.json['Codigo do item'];\n\n// 3️⃣ Extrai letras e números\nconst match = ultimoCodigo.match(/^([A-Za-z]+)(\\d+)$/);\n\nif (!match) {\n  ultimoItem.json.erro = \"FORMATO_INVALIDO\";\n  return itensValidos;\n}\n\nconst prefixo = match[1];\nconst numeroAtual = parseInt(match[2], 10);\n\n// 4️⃣ Incrementa o número\nconst novoNumero = numeroAtual + 1;\n\n// 5️⃣ Mantém zeros à esquerda\nconst tamanhoNumero = match[2].length;\nconst novoNumeroFormatado = String(novoNumero).padStart(tamanhoNumero, '0');\n\n// 6️⃣ Novo código\nconst novoCodigo = `${prefixo}${novoNumeroFormatado}`;\n\n// 7️⃣ Salva no ÚLTIMO item\nultimoItem.json.novo_codigo = novoCodigo;\n\n// 8️⃣ Retorna APENAS o último item (evita apagar outros)\nreturn [ultimoItem];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4544,
+        4864
+      ],
+      "id": "09103ca8-80ac-467d-bf79-d26f3388f502",
+      "name": "Código para separar String de int3"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger, após o envio dos dados do cadastro ele dispara para realizar o resto do processo \n",
+        "height": 352,
+        "width": 304,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3376,
+        5376
+      ],
+      "typeVersion": 1,
+      "id": "f451f9cf-8e32-4023-88d7-f66d9bcfab81",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "## Se nenhuma conta contábil se encaixar com o item, entrara em contato com algum responsável\n",
+        "height": 1648,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6256,
+        4592
+      ],
+      "typeVersion": 1,
+      "id": "1d556744-a3bf-476f-bf3f-f98eba8f9ca2",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Edit Fields7').item.json['Banco de dados'] }}",
+                    "rightValue": "INBRANDS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "3e4995cc-3568-44bc-a031-73ce9127e328"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "66a77779-5c92-4be3-b1e3-83a759a808e0",
+                    "leftValue": "={{ $('Edit Fields7').item.json['Banco de dados'] }}",
+                    "rightValue": "TOMMY",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a7d88002-6847-4262-a43a-5d2f1374be6b",
+                    "leftValue": "={{ $('Edit Fields7').item.json['Banco de dados'] }}",
+                    "rightValue": "SALINAS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3952,
+        5536
+      ],
+      "id": "2e91aa3c-1a3e-4f8b-8f88-a5e4db1471f0",
+      "name": "Decisão do Banco de dados1"
+    },
+    {
+      "parameters": {
+        "content": "## Comando do SQL que insere os dados do cadastro direto no banco\n",
+        "height": 1728,
+        "width": 208,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6832,
+        4832
+      ],
+      "typeVersion": 1,
+      "id": "a04ec84e-9c8d-47d0-b4c6-56790874aee1",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {
+        "content": "## Envia o e-mail para o usuário que solicitou o cadastro",
+        "height": 1712,
+        "width": 192,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        7424,
+        4848
+      ],
+      "typeVersion": 1,
+      "id": "096f4a2d-877b-46b8-a643-f437002f0ae4",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0",
+          "mode": "list",
+          "cachedResultName": "Planilha de cadastros",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Cadastros IB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Codigo do item": "={{ $('Edit Fields6').item.json['Codigo do item'] }}",
+            "Desc do item": "={{ $('Edit Fields7').item.json['Nome do item'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Codigo do item",
+              "displayName": "Codigo do item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Desc do item",
+              "displayName": "Desc do item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7168,
+        5024
+      ],
+      "id": "80ecfba7-557b-48b5-ba28-f5eade6791a9",
+      "name": "Planilha para adicionar o item cadastrado IB1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0",
+          "mode": "list",
+          "cachedResultName": "Planilha de cadastros",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 198421543,
+          "mode": "list",
+          "cachedResultName": "Cadastros TH",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit#gid=198421543"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Codigo do item": "={{ $('Edit Fields5').item.json['Codigo do item'] }}",
+            "Desc do item": "={{ $('Edit Fields7').item.json['Nome do item'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Codigo do item",
+              "displayName": "Codigo do item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Desc do item",
+              "displayName": "Desc do item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7168,
+        5696
+      ],
+      "id": "6c6276fc-faa7-445c-98fa-d7096c7b5979",
+      "name": "Planilha para adicionar o item cadastrado TH1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0",
+          "mode": "list",
+          "cachedResultName": "Planilha de cadastros",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1522261375,
+          "mode": "list",
+          "cachedResultName": "Cadastros SL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit#gid=1522261375"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Codigo do item": "={{ $('Edit Fields4').item.json['Codigo do item'] }}",
+            "Desc do item": "={{ $('Edit Fields7').item.json['Nome do item'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Codigo do item",
+              "displayName": "Codigo do item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Desc do item",
+              "displayName": "Desc do item",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        7152,
+        6400
+      ],
+      "id": "9ed1aa0a-36f2-4408-90ae-6bee48ef2905",
+      "name": "Planilha para adicionar o item cadastrado SL1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI",
+          "mode": "list",
+          "cachedResultName": "Contas contabeis",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 461745371,
+          "mode": "list",
+          "cachedResultName": "Conta SL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI/edit#gid=461745371"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5056,
+        6240
+      ],
+      "id": "56499f93-39ba-4f71-b2f8-445c6721321c",
+      "name": "Contas contábeis SL1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI",
+          "mode": "list",
+          "cachedResultName": "Contas contabeis",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": " Conta TH",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5040,
+        5552
+      ],
+      "id": "33982398-bac1-4e33-9f8c-4a2f0bec33ef",
+      "name": "Contas contábeis TH1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI",
+          "mode": "list",
+          "cachedResultName": "Contas contabeis",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 338709825,
+          "mode": "list",
+          "cachedResultName": "Conta IB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yzkeSegmLnEDCIBW5miREIBPkx3dBC8zqFUzaTnRaGI/edit#gid=338709825"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5056,
+        4864
+      ],
+      "id": "441cb42e-6268-4931-b70d-7ebc3e686244",
+      "name": "Contas contábeis IB1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0",
+          "mode": "list",
+          "cachedResultName": "Planilha de cadastros",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Cadastros IB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4288,
+        4864
+      ],
+      "id": "2e1b1957-51fc-4d02-a8fb-7a911616546e",
+      "name": "Planilha de código de itens Inbrands1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0",
+          "mode": "list",
+          "cachedResultName": "Planilha de cadastros",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 198421543,
+          "mode": "list",
+          "cachedResultName": "Cadastros TH",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit#gid=198421543"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4304,
+        5552
+      ],
+      "id": "31cec2dd-a872-46b6-bf07-cd87c30193d7",
+      "name": "Planilha de código de itens Tommy1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0",
+          "mode": "list",
+          "cachedResultName": "Planilha de cadastros",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1522261375,
+          "mode": "list",
+          "cachedResultName": "Cadastros SL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ObEq2p4AAEI64GsxcwJlISjDLElY3Y4oaXVSVc5zqa0/edit#gid=1522261375"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4288,
+        6240
+      ],
+      "id": "4fa60e77-d23d-4820-a0f8-18b386662041",
+      "name": "Planilha de códigos de itens salinas1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sUNRrZy9VSndkdeJ",
+          "name": "API sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Decisão da conta contábil ",
+        "height": 1760,
+        "width": 432,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5488,
+        4816
+      ],
+      "typeVersion": 1,
+      "id": "7b0d4619-f251-4f81-9f3b-dcca4c405032",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        5312,
+        6240
+      ],
+      "id": "071001c6-4e2d-4728-9b0d-39cbe370816e",
+      "name": "Aggregate4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ddc449e3-45c6-47bf-92d9-a654c1b3b6da",
+              "leftValue": "={{ JSON.parse($json.output).id_conta }}",
+              "rightValue": "{\"id_conta\":false}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        6032,
+        6240
+      ],
+      "id": "899b8cfc-2e1e-4834-a1f5-b4deb3f0bb4b",
+      "name": "If12"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5504,
+        6448
+      ],
+      "id": "309c9291-d255-41a2-b307-3378ed973bf3",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Segue o array das contas: {{ $json.data }}\n\nE segue o nome do item: {{ $('Edit Fields7').item.json['Nome do item'] }}",
+        "options": {
+          "systemMessage": "Você é um agente de IA responsável apenas por escolher uma única conta contábil final para um item recebido.\n\nVocê receberá um JSON contendo a lista completa das contas contábeis da empresa, onde cada elemento possui o ID e a descrição da conta contábil.\n\nTodas as contas devem ser consideradas como um conjunto único.\n\nVocê também receberá a descrição do item fiscal e o setor do solicitante.\n\nA escolha da conta deve ser feita com base na melhor correspondência conceitual disponível entre as opções apresentadas.\n\nA classificação não precisa ser literal ou exata.\nVocê pode considerar o uso típico do item no contexto empresarial.\n\nQuando houver dúvida entre múltiplas contas possíveis, escolha aquela que represente a finalidade mais comum do item.\n\nEvite retornar false sempre que existir uma conta razoavelmente aplicável.\n\nRegras obrigatórias de saída\n\nRetorne apenas UM output.\n\nSe encontrar uma conta compatível, responda exatamente no formato:\n{ \"id_conta\": numero }\n\nSe realmente não existir nenhuma conta aplicável, responda:\n{ \"id_conta\": false }\n\nNão escreva explicações."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        5568,
+        6240
+      ],
+      "id": "fd75bb44-631c-4e52-af56-5e13cf0ad8ff",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO CADASTRO_ITEM_FISCAL\n  (ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE\n  ,TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n  ('{{ $('Edit Fields1').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields3').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Edit Fields1').item.json.CST }}'\n  , '{{ $('Edit Fields1').item.json['NCM do item '] }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '03'\n  , '07'\n  , '9')"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        6880,
+        6400
+      ],
+      "id": "379eb426-b0e9-4ebd-ae81-8219f5a0cc02",
+      "name": "Microsoft SQL12",
+      "retryOnFail": true,
+      "credentials": {
+        "microsoftSql": {
+          "id": "pDQfRZo44eKZeHAY",
+          "name": "SQL SL"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        5328,
+        5552
+      ],
+      "id": "b9a2a2ce-a032-4931-8355-848155477b3a",
+      "name": "Aggregate5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ddc449e3-45c6-47bf-92d9-a654c1b3b6da",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "{\"id_conta\":false}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        6032,
+        5552
+      ],
+      "id": "49426fb7-f07e-404c-b47f-88bc3c3bdaa3",
+      "name": "If13"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5520,
+        5760
+      ],
+      "id": "04544e15-a199-403c-a9aa-79c112e35802",
+      "name": "Google Gemini Chat Model6",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você receberá os dados de um item fiscal que precisa ser vinculado a uma conta contábil.\n\nDescrição do item:\n{{ $('Edit Fields7').item.json['Nome do item'] }}\n\nSetor do solicitante:\n{{ $('Edit Fields7').item.json['Setor do solicitante'] }}\n\nArray com as contas: \n{{ JSON.stringify($json.data) }}",
+        "options": {
+          "systemMessage": "Você é um agente de IA responsável apenas por escolher uma única conta contábil final para um item recebido.\n\nVocê receberá um JSON contendo a lista completa das contas contábeis da empresa, onde cada elemento possui o ID e a descrição da conta contábil.\n\nTodas as contas devem ser consideradas como um conjunto único.\n\nVocê também receberá a descrição do item fiscal e o setor do solicitante.\n\nA escolha da conta deve ser feita com base na melhor correspondência conceitual disponível entre as opções apresentadas.\n\nA classificação não precisa ser literal ou exata.\nVocê pode considerar o uso típico do item no contexto empresarial.\n\nQuando houver dúvida entre múltiplas contas possíveis, escolha aquela que represente a finalidade mais comum do item.\n\nEvite retornar false sempre que existir uma conta razoavelmente aplicável.\n\nRegras obrigatórias de saída\n\nRetorne apenas UM output.\n\nSe encontrar uma conta compatível, responda exatamente no formato:\n{ \"id_conta\": numero }\n\nSe realmente não existir nenhuma conta aplicável, responda:\n{ \"id_conta\": false }\n\nNão escreva explicações."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        5584,
+        5552
+      ],
+      "id": "2f32a5ae-a8f8-4825-ab24-88716e6586de",
+      "name": "AI Agent4"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO CADASTRO_ITEM_FISCAL\n(ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE\n  , TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n('{{ $('Edit Fields1').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields2').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Edit Fields1').item.json.CST }}'\n  , '{{ $('Edit Fields1').item.json['NCM do item '] }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '2'\n  , '07'\n  , '9')"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        6880,
+        5696
+      ],
+      "id": "70d920b8-4d76-4d47-a8ce-222b064b4cb8",
+      "name": "Microsoft SQL13",
+      "retryOnFail": true,
+      "credentials": {
+        "microsoftSql": {
+          "id": "OkN54iV2AMtgjIYk",
+          "name": "SQL TH"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        5312,
+        4864
+      ],
+      "id": "d5664848-214e-4d82-8e18-952417f0ed4a",
+      "name": "Aggregate6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ddc449e3-45c6-47bf-92d9-a654c1b3b6da",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "{\"id_conta\":false}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        6032,
+        4864
+      ],
+      "id": "836b5802-1651-44ef-82bc-fdfe18a103b3",
+      "name": "If14"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        5504,
+        5104
+      ],
+      "id": "050d22a1-ee10-4329-a302-6b30c3b3a0a1",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "MDybPyeFzlSCGMVU",
+          "name": "Gemini api pro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você receberá os dados de um item fiscal que precisa ser vinculado a uma conta contábil.\n\nDescrição do item:\n{{ $('Edit Fields7').item.json['Nome do item'] }}\n\nSetor do solicitante:\n{{ $('Edit Fields7').item.json['Setor do solicitante'] }}\n\nArray com as contas: \n{{ JSON.stringify($json.data) }}",
+        "options": {
+          "systemMessage": "Você é um agente de IA responsável apenas por escolher uma única conta contábil final para um item recebido.\n\nVocê receberá um JSON contendo a lista completa das contas contábeis da empresa, onde cada elemento possui o ID e a descrição da conta contábil.\n\nTodas as contas devem ser consideradas como um conjunto único.\n\nVocê também receberá a descrição do item fiscal e o setor do solicitante.\n\nA escolha da conta deve ser feita com base na melhor correspondência conceitual disponível entre as opções apresentadas.\n\nA classificação não precisa ser literal ou exata.\nVocê pode considerar o uso típico do item no contexto empresarial.\n\nQuando houver dúvida entre múltiplas contas possíveis, escolha aquela que represente a finalidade mais comum do item.\n\nEvite retornar false sempre que existir uma conta razoavelmente aplicável.\n\nRegras obrigatórias de saída\n\nRetorne apenas UM output.\n\nSe encontrar uma conta compatível, responda exatamente no formato:\n{ \"id_conta\": numero }\n\nSe realmente não existir nenhuma conta aplicável, responda:\n{ \"id_conta\": false }\n\nNão escreva explicações."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        5568,
+        4864
+      ],
+      "id": "bdf3d63e-a643-4f65-af1c-a802ec9924d1",
+      "name": "AI Agent5"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SET NOCOUNT ON;\n\nINSERT INTO CADASTRO_ITEM_FISCAL\n(ITEM_DESCRICAO\n  , CODIGO_ITEM\n  , UNIDADE\n  ,TRIBUT_ORIGEM\n  , CLASSIF_FISCAL\n  , CONTA_CONTABIL\n  , INDICADOR_CFOP\n  , ITEM_FISCAL_GRUPO\n  , TIPO_ITEM_SPED\n  , IDENT_UTILIZACAO_IMOB)\nVALUES\n('{{ $('Edit Fields1').item.json['Nome do item'] }}'\n  , '{{ $('Edit Fields').item.json['Codigo do item'] }}'\n  , 'UN'\n  , '{{ $('Edit Fields1').item.json.CST }}'\n  , '{{ $('Edit Fields1').item.json['NCM do item '] }}'\n  , '{{ $json.numero_conta }}'\n  , '13'\n  , '02'\n  , '07'\n  , '9')"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        6896,
+        5024
+      ],
+      "id": "653c0a65-be14-4bbe-bf1e-31502043039b",
+      "name": "Microsoft SQL14",
+      "retryOnFail": true,
+      "credentials": {
+        "microsoftSql": {
+          "id": "8rguz0R8o0fp0CrE",
+          "name": "SQL IB"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
+        "subject": "CONTA CONTÁBIL NÃO ENCONTRADA",
+        "message": "=Olá!  <br><br>Não foi encontrada nenhuma conta para o item {{ $('Edit Fields7').item.json['Nome do item'] }}.  <br>Para o cadastro desse item sera necesario o cadastro manual.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        6320,
+        6048
+      ],
+      "id": "640e70d5-38d5-41d7-90fc-8274037f055a",
+      "name": "Send a message6",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
+        "subject": "CONTA CONTÁBIL NÃO ENCONTRADA",
+        "message": "=Olá!  <br><br>Não foi encontrada nenhuma conta para o item {{ $('Edit Fields7').item.json['Nome do item'] }}.  \n\n<br>Para o cadastro desse item sera necesario o cadastro manual.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        6320,
+        5456
+      ],
+      "id": "d56cf317-f5e2-4a0e-b234-7bf41f15aab4",
+      "name": "Send a message7",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
+        "subject": "CONTA CONTÁBIL NÃO ENCONTRADA",
+        "message": "=Olá!\n\n<br><br>Não foi encontrada nenhuma conta para o item {{ $('Edit Fields7').item.json['Nome do item'] }}.\n\nPara o cadastro desse item sera necesario o cadastro manual.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        6320,
+        4816
+      ],
+      "id": "118612b4-ab9c-4861-b2d6-f393f63b21ec",
+      "name": "Send a message8",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
+        "subject": "CÓDIGO DO ITEM REPETIDO",
+        "message": "=Olá!\n\n<br><br>Para o cadastro do item: {{ $('Edit Fields7').item.json['Nome do item'] }} ser realizado, <br> será necessario atualizar a planilha de cadastro de itens para um codigo valido.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        7168,
+        5232
+      ],
+      "id": "110a3541-a39b-4ae4-adb1-32c080641f03",
+      "name": "Send a message9",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
+        "subject": "CÓDIGO DO ITEM REPETIDO",
+        "message": "=Olá!  <br><br>Para o cadastro do item: {{ $('Edit Fields7').item.json['Nome do item'] }} ser realizado, <br> será necessario atualizar a planilha de cadastro de itens para um codigo valido.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        7168,
+        5904
+      ],
+      "id": "74a4e22d-fd82-49f1-a3cc-4c34d463f56c",
+      "name": "Send a message10",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "<Boletim de atualização fiscais> joaopedro.mlima9@gmail.com",
+        "subject": "CÓDIGO DO ITEM REPETIDO",
+        "message": "=Olá!  <br><br>Para o cadastro do item: {{ $('Edit Fields7').item.json['Nome do item'] }} ser realizado, <br> será necessario atualizar a planilha de cadastro de itens para um codigo valido.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        7152,
+        6592
+      ],
+      "id": "e551bd06-ab17-45ef-abc6-fc9161a58aa7",
+      "name": "Send a message11",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields7').item.json['E-mail corporativo'] }}",
+        "subject": "CADASTRO DE ITEM",
+        "message": "=Ola!<br><br>Segue o cadastro do item {{ $('Edit Fields7').item.json['Nome do item'] }} com o código: {{ $('Edit Fields4').item.json['NCM do item '] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        7472,
+        6400
+      ],
+      "id": "ff8b7b05-c616-49b2-be92-3c36d02e2166",
+      "name": "Send a message12",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields7').item.json['E-mail corporativo'] }}",
+        "subject": "CADASTRO DE ITEM",
+        "message": "=Ola!<br><br>Segue o cadastro do item {{ $('Edit Fields7').item.json['Nome do item'] }} com o código: {{ $('Edit Fields5').item.json['NCM do item '] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        7472,
+        5696
+      ],
+      "id": "fee0f7be-d307-4827-a717-2c6eecd5450a",
+      "name": "Send a message13",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields7').item.json['E-mail corporativo'] }}",
+        "subject": "CADASTRO DE ITEM",
+        "message": "=Ola!<br><br>Segue o cadastro do item {{ $('Edit Fields7').item.json['Nome do item'] }} com o código: {{ $('Edit Fields7').item.json['NCM do item '] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        7472,
+        5024
+      ],
+      "id": "daabcad1-6591-4362-9b69-6ba06c4b2aef",
+      "name": "Send a message14",
+      "webhookId": "92431ca1-4f89-460d-ba01-703ce20cb24a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "te8Ze3Cr0yJGQtzs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "86922936-95e1-472b-ab6c-2535382450ce",
+              "name": "Codigo do item",
+              "value": "={{ $json.novo_codigo.toString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4816,
+        6240
+      ],
+      "id": "1115ab62-7df2-4066-b348-50a160e28357",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "86922936-95e1-472b-ab6c-2535382450ce",
+              "name": "Codigo do item",
+              "value": "={{ $json.novo_codigo.toString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4784,
+        5552
+      ],
+      "id": "3c144461-b2bb-47ca-b996-b33d06525110",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "86922936-95e1-472b-ab6c-2535382450ce",
+              "name": "Codigo do item",
+              "value": "={{ $json.novo_codigo.toString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4784,
+        4864
+      ],
+      "id": "ba224ab5-19fd-4782-843c-93a0511c50b0",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3934ef80-1aa1-4980-bc90-0c4f3ba5f770",
+              "name": "Nome do item",
+              "value": "={{ $json['Nome do item'].toString() }}",
+              "type": "string"
+            },
+            {
+              "id": "4aae4cc5-c4e4-4329-9882-e86270734099",
+              "name": "NCM do item ",
+              "value": "={{ ($json['NCM do item ']).replace(/\\./g, \"\") }}",
+              "type": "string"
+            },
+            {
+              "id": "1b4118d0-9d73-409d-9344-329df8dc8001",
+              "name": "E-mail corporativo",
+              "value": "={{ $json['E-mail corporativo'].toString() }}",
+              "type": "string"
+            },
+            {
+              "id": "4871880a-87ff-45a1-aa85-f837cd0db2a2",
+              "name": "Banco de dados",
+              "value": "={{ $json['Banco de dados'] }}",
+              "type": "string"
+            },
+            {
+              "id": "52a285ea-0f57-4e8f-9da8-8316e5485e6c",
+              "name": "CST",
+              "value": "={{ ($json.CST).padStart(0,1) }}",
+              "type": "string"
+            },
+            {
+              "id": "c18cfb14-3681-465d-99b2-3cc7cfe5acc3",
+              "name": "Setor do solicitante",
+              "value": "={{ $json['Setor da pessoa '] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3744,
+        5552
+      ],
+      "id": "b3a3ce62-a71b-457d-8cdc-ea24ceb8663f",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "formTitle": "Cadastro de itens",
+        "formDescription": "=Para realizar o cadastro de um item, é obrigatório informar corretamente os dados abaixo.\n\n<br><br>Selecione qual banco de dados o item deverá ser cadastrado.\n<br>Informe a descrição do item exatamente conforme consta na nota fiscal.\n<br>Informe o NCM conforme apresentado na nota fiscal (lembre - se nessa etapa não tem a validação do NCM logo ele tera que ser validado antes manualmente).\n<br>Informe o código tributário correspondente, podendo ser CST, O/CST ou CST/CSOSN, de acordo com o tipo da nota fiscal (estes são alguns exemplos possíveis).\n<br>Informe o e-mail corporativo da pessoa solicitante para o envio do cadastro.\n\n<br><br>O correto preenchimento dessas informações é essencial para garantir o cadastro correto do item no sistema.",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "Banco de dados",
+              "fieldLabel": "Qual banco para cadastrar o item",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "INBRANDS"
+                  },
+                  {
+                    "option": "TOMMY"
+                  },
+                  {
+                    "option": "SALINAS"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldName": "Nome do item",
+              "fieldLabel": "Descrição do item",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldName": "NCM do item ",
+              "fieldLabel": "NCM do item",
+              "requiredField": true
+            },
+            {
+              "fieldName": "CST",
+              "fieldLabel": "CST - Código de Situação Tributária",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Setor da pessoa ",
+              "fieldLabel": "Selecione o setor solicitante ",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Manutenção"
+                  },
+                  {
+                    "option": "Marketing"
+                  },
+                  {
+                    "option": "Visual Merchandising"
+                  },
+                  {
+                    "option": "Gente & Gestão"
+                  },
+                  {
+                    "option": "T.I"
+                  },
+                  {
+                    "option": "Logística"
+                  },
+                  {
+                    "option": "Obras"
+                  },
+                  {
+                    "option": "Produção"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldName": "E-mail corporativo",
+              "fieldLabel": "Digite o e-mail corporativo da pessoa solicitante ",
+              "fieldType": "email",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Enviar",
+          "path": "e7367059-7d75-4581-8dea-2735bca9eff5",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "O cadastro será enviado para o e-mail corporativo informado."
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        3504,
+        5552
+      ],
+      "id": "5d4b3e31-cfba-4dd0-bdff-847e6e738609",
+      "name": "On form submission1",
+      "webhookId": "e7367059-7d75-4581-8dea-2735bca9eff5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria o output em JSON ": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria o output em JSON 4": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Código para separa String de int1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Código para separar String de int2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Código para separar String de int3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decisão do Banco de dados1": {
+      "main": [
+        [
+          {
+            "node": "Planilha de código de itens Inbrands1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Planilha de código de itens Tommy1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Planilha de códigos de itens salinas1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha para adicionar o item cadastrado IB1": {
+      "main": [
+        [
+          {
+            "node": "Send a message14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha para adicionar o item cadastrado TH1": {
+      "main": [
+        [
+          {
+            "node": "Send a message13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha para adicionar o item cadastrado SL1": {
+      "main": [
+        [
+          {
+            "node": "Send a message12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contas contábeis SL1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contas contábeis TH1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contas contábeis IB1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha de código de itens Inbrands1": {
+      "main": [
+        [
+          {
+            "node": "Código para separar String de int3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha de código de itens Tommy1": {
+      "main": [
+        [
+          {
+            "node": "Código para separa String de int1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha de códigos de itens salinas1": {
+      "main": [
+        [
+          {
+            "node": "Código para separar String de int2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate4": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If12": {
+      "main": [
+        [
+          {
+            "node": "Send a message6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cria o output em JSON 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL12": {
+      "main": [
+        [
+          {
+            "node": "Planilha para adicionar o item cadastrado SL1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate5": {
+      "main": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If13": {
+      "main": [
+        [
+          {
+            "node": "Send a message7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cria o output em JSON ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent4": {
+      "main": [
+        [
+          {
+            "node": "If13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL13": {
+      "main": [
+        [
+          {
+            "node": "Planilha para adicionar o item cadastrado TH1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate6": {
+      "main": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If14": {
+      "main": [
+        [
+          {
+            "node": "Send a message8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent5": {
+      "main": [
+        [
+          {
+            "node": "If14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SQL14": {
+      "main": [
+        [
+          {
+            "node": "Planilha para adicionar o item cadastrado IB1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Contas contábeis SL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Contas contábeis TH1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Contas contábeis IB1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Decisão do Banco de dados1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "2c821c08-9b9c-4406-ae20-317b7e2bfbe1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c9ac0336281178410ae1caf9c0c4bc6510509f0f05a469f30c634bd9ecc77f35"
+  },
+  "id": "I8kqLO8MC7IQmRzt3RAfz",
+  "tags": [
+    {
+      "updatedAt": "2026-02-10T01:45:31.626Z",
+      "createdAt": "2026-02-10T01:45:31.626Z",
+      "id": "YilRmVmeVnaYqnNc",
+      "name": "Cadastro de itens"
+    }
+  ]
+}
